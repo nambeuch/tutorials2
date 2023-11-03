@@ -1,0 +1,205 @@
+
+---
+title: "SAS and R comparisons"
+format: html
+editor: visual
+---
+
+## Introduction
+
+In this tutorial, we'll review some of the data manipulations often performed in SAS, but in R. The tutorial is based on the following document:https://github.com/rstudio/cheatsheets/blob/main/pngs/sas-r.png
+
+## Installing packages
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+```
+
+## Donwloading data
+
+```{r}
+# set your working directory
+setwd("C:/Users/nambchr/Desktop/tutorials/tutorials")
+
+# Define the URL of the ZIP file you want to download
+zip_url <- "https://www150.statcan.gc.ca/n1/en/pub/71m0001x/2021001/2023-09-CSV.zip"
+
+# Specify the destination directory where you want to save the ZIP file
+destination_dir <- "C:/Users/nambchr/Desktop/tutorials/tutorials/session3"
+
+# Use download.file to download the ZIP file
+download.file(zip_url, destfile = file.path(destination_dir, "2023-09-CSV.zip"), mode = "wb")
+
+# Unzip the downloaded file
+unzip(file.path(destination_dir, "2023-09-CSV.zip"), exdir = paste0(destination_dir, "/data"))
+
+# You can now access the contents of the ZIP file in the destination directory
+
+```
+
+## Reading data
+
+In this section, read a CSV dataset into a data.frame. Convert the data.frame into a tibble (https://tibble.tidyverse.org/).
+
+```{r}
+setwd(paste0(destination_dir, "/", "data")) # set the working directory
+lfs_2023 <- read.csv(file = "pub0923.csv") # read the file
+head(lfs_2023)
+is.data.frame(lfs_2023)
+lfs_2023$WAGES <- rnorm(nrow(lfs_2023), 100, 8) # create a variable by name in a dataframe
+lfs_2023$BENEFITS <- rexp(nrow(lfs_2023), 1/25)
+lfs_2023t <- tibble::as_tibble(lfs_2023) # convert our dataframe to the enhance dataframe type tibble
+lfs_2023t
+str(lfs_2023t) # structure
+```
+
+## Quick exploration of the lfs dataset
+
+```{r}
+
+dim(lfs_2023t) # number of rows and columns
+
+## keep variables REC_NUM, LFSSTAT, PROV, 
+list_of_variables <- toupper(c("REC_NUM", "PROV", "MARSTAT", "NOC_10", "FINALWT","sex", "COWMAIN"))
+var_of_interest <- toupper(c("rec_num","LFSSTAT", "everwork", "permtemp", "wages", "benefits"))
+
+file_var_analysis <- lfs_2023t %>% select(all_of(list_of_variables))
+file_var_interest<- lfs_2023t %>% select(all_of(var_of_interest) ) ## used all_of() because the use of a vector is now deprecated.
+
+```
+
+### Bloc 1: Datasets: drop, keep and rename variables
+
+```{r}
+# bloc 1: drop and rename variables
+## drop 
+file_var_analysis <- file_var_analysis %>% select(-COWMAIN)
+## rename the variable weight to fweight
+file_var_analysis <- file_var_analysis %>% rename(FWEIGHT = FINALWT)
+```
+
+### Bloc 2: New variables and conditional editing
+
+Create a variable called **INCOME** as the sum of **WAGES** and **BENEFITS**.
+
+```{r}
+file_var_interest <- file_var_interest %>% mutate(INCOME = WAGES + BENEFITS)
+file_var_interest[, c("REC_NUM","INCOME", "WAGES", "BENEFITS")] # can use select() too
+#file_var_interest %>% select(REC_NUM, INCOME, WAGES, BENEFITS)
+
+
+```
+
+Conditional editing - Use the table below to split Canada into different regions.
+
+| Regions           | Provinces                                                                                       |
+|-----------------------|-------------------------------------------------|
+| British Columbia  | British Columbia (59)                                                                           |
+| Canadian Prairies | Alberta (48), Saskatchewan (47), Manitoba (46)                                                  |
+| Ontario           | Ontario (35)                                                                                    |
+| Quebec            | Quebec (24)                                                                                     |
+| Atlantic Canada   | New Brunswick (13), Prince Edward Island (11), Nova Scotia (12), Newfoundland and Labrador (10) |
+| Northern Canada   | Yukon, Northwest Territories, Nunavut                                                           |
+
+: Regions in Canada
+
+```{r}
+# frequency
+table(file_var_analysis$PROV)
+
+file_var_analysis <- file_var_analysis %>% mutate(region = case_when(PROV %in% c(59) ~ "British Columbia", PROV %in% c(48,47,46) ~ "Prairies", PROV %in% c(35) ~"Ontario", PROV %in% c(24) ~"Quebec", PROV %in% c(13,11,12,10) ~ "Atlantic", TRUE~ ""))
+
+file_var_analysis
+table(file_var_analysis$region, useNA = "ifany")
+```
+
+Conditional editing using \*\* if_else\*\*
+
+```{r}
+file_var_interest <- file_var_interest %>% mutate(RICH = if_else(INCOME > 105, 1,0))
+
+table(file_var_interest$RICH)
+```
+
+### Bloc 3: Conditional filtering
+
+Create a file containing only records with variable $RICH = 1$.
+
+```{r}
+rich_guys <- file_var_interest %>% filter(RICH == 1)
+print(rich_guys)
+```
+
+Create a file containing only married and living in common-law
+
+```{r}
+in_couple <- file_var_analysis %>% filter(MARSTAT %in% c(1,2))
+in_couple
+table(in_couple$PROV) # number of people in couple in the file
+```
+
+### Bloc 4: Counting and summarizing
+
+Number of males and females in the file.
+
+```{r}
+file_var_analysis %>% count(SEX)
+```
+
+Number of males and females by region in Canada in the file.
+
+```{r}
+file_var_analysis %>% count(region, SEX)
+```
+
+Adding percentage - can call mutate()
+
+```{r}
+file_var_analysis %>% count(region, SEX) %>% mutate(percent = 100*n/sum(n))
+```
+
+Number of people by marital status and regions.
+
+```{r}
+file_var_analysis %>% group_by(region, MARSTAT) %>% summarize(nrecords = n())
+```
+
+### Bloc 5: Combining datasets
+
+Combining by rows
+
+```{r}
+# for tests purposes only
+data1 <- file_var_analysis %>% slice((1:50000))
+data2 <- file_var_analysis %>% slice(-(1:50000))
+
+# combine the two sets
+comb_file  <- bind_rows(data1, data2)
+identical(comb_file, file_var_analysis) # return TRUE - both files are identical
+rm(list = c("comb_file"))
+```
+
+Merging files
+
+```{r}
+# inner join == in(a and b)
+file_inner_join <- file_var_interest %>% inner_join(file_var_analysis, by = "REC_NUM")
+
+file_left_join <- file_var_interest %>% left_join(file_var_analysis, by = "REC_NUM")
+
+file_right_join <- file_var_interest %>% right_join(file_var_analysis, by = "REC_NUM")
+```
+
+### Bloc 6:
+
+```{r}
+# weighted sum
+file_inner_join %>% group_by(region) %>% summarize( tot_income = sum(INCOME*FWEIGHT))
+
+# Number of weighted people
+file_inner_join %>% group_by(region) %>% summarize( tot_pers = sum(FWEIGHT))
+
+# number of females weighted
+file_inner_join %>% group_by(region) %>% summarize( tot_females = sum(FWEIGHT*(SEX = 2)))
+```

@@ -1,0 +1,147 @@
+---
+title: "Factors"
+---
+
+## Intro
+
+Factors are often used to analyze categorical variables.
+
+Factors have attributes: levels and class.
+
+This tutorial is about the use of factors.
+
+## Creating factors
+
+Factors can be created using the function **factor**. A given vector can also be coerced into a factor using the function **as.factor**.
+
+```{r}
+## SGC codes.
+prov_levels <- c(10,11,12,13,24,35,46,47,48,59)
+prov_levels <- as.character(prov_levels)
+
+dta <- c("47", "35", "11", "24" ,"48", "48", "59", "59" ,"24", "35", "13" ,"61","12", "11", "13", "10", "59", "48" ,"62", "48")
+
+
+## creating a factor variable based on dta
+dta_factor <- factor(dta, levels = prov_levels)
+dta_factor
+
+
+## attributes
+attributes(dta_factor)
+
+```
+
+We can also create the factor variable without specifying the expected **levels**.
+
+```{r}
+dta_factor2 <- factor(dta)
+###> What to expect?
+```
+
+## Reading a factor variable
+
+We can read a factor variable the same way we read a basic vector.
+
+```{r}
+dta_factor[1] # access first element
+
+dta_factor[2:5] # elements from position 2 to 5
+```
+
+## Updating a factor variable
+
+Factors can be updated by changing the value of the expected levels.
+
+```{r}
+## add territorial in the levels.
+dta_f_terr <- factor(dta, levels = c(prov_levels, c("60","61","62")))
+dta_f_terr 
+```
+
+## Deleting a factor variable
+
+Like any other objects.
+
+```{r}
+rm(list = c("dta_f_terr"))
+```
+
+## Factors in practice
+
+### In a data.frame
+
+```{r}
+frame <- data.frame(income = rexp(20, rate = 0.05), province_code = dta)
+
+is.data.frame(frame)
+
+## convert province_code to a factor
+frame$province_code <- factor(frame$province_code, levels = prov_levels)
+str(frame)
+```
+
+### Editing
+
+```{r}
+## identifying out of scope provinces and how many are they
+
+sum(is.na(frame$province_code)) 
+
+```
+
+```{r}
+# computing table of frequency - remember function table
+table(frame[, c("province_code")], useNA = "always")
+
+```
+
+```{r}
+## if we are not happy with the other - change the other in the levels
+dta_factor_2prov <- factor(frame$province_code, levels = c("35", "24"))
+table(dta_factor_2prov)
+```
+
+```{r}
+
+## creating income classes
+
+frame$income_class <- cut(frame$income, breaks = min(frame$income) + 10*(0:5))
+frame
+
+
+```
+
+```{r}
+
+table(frame$income_class, frame$province_code)
+```
+
+### Creating some plots
+
+**Barplot**
+
+```{r}
+barplot(table(dta_factor))
+## note that we can change the order in which the labels appear.
+```
+
+**Pie Chart**
+
+```{r}
+pie(table(dta_factor_2prov))
+```
+
+**Mosaicplot**
+
+```{r}
+mosaicplot(table(frame$income_class, frame$province_code))
+```
+
+**Remarks**
+
+Factors can be used to conduct statistical analyses involving categorical variables. Some models in R required the use of factors.
+
+```{r}
+lm(frame$income ~ frame$province_code)
+```

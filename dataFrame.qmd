@@ -1,0 +1,71 @@
+---
+title: "Data Frame"
+---
+
+## Dataframe
+
+A data frame is a two-dimensional data structure in R that resembles a table or spreadsheet. 
+
+It can hold data of different types, with rows and columns. 
+
+Data frames are commonly used to store and manipulate data sets.
+
+## Create
+
+```{r}
+# Create an empty data frame
+my_df <- data.frame()
+
+# Create a data frame with columns
+employee_data <- data.frame(
+  Name = c("Alice", "Bob", "Charlie"),
+  Age = c(30, 35, 28),
+  Department = c("HR", "IT", "Finance")
+)
+
+```
+
+## Read
+
+```{r}
+# Access a specific column
+names <- employee_data$Name
+ages <- employee_data$Age
+
+# Access specific rows
+alice_data <- employee_data[1, ]
+bob_data <- employee_data[2, ]
+
+# Access specific elements
+charlie_age <- employee_data[3, "Age"]
+
+
+
+```
+
+## Update
+```{r}
+# Modify a specific element
+employee_data[1, "Age"] <- 31
+
+# Add a new column
+employee_data$Salary <- c(50000, 60000, 55000)
+
+# Add a new row
+new_employee <- data.frame(Name = "David", Age = 29, Department = "Sales", Salary = 52000)
+employee_data <- rbind(employee_data, new_employee)
+
+```
+
+
+## Delete
+
+```{r}
+# Remove a specific row
+employee_data <- employee_data[-2, ]
+
+# Remove a specific column
+employee_data$Salary <- NULL
+
+```
+

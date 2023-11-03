@@ -1,9 +1,7 @@
 ---
-title: "About"
+title: "About Us"
 ---
 
-About this site
+This Quarto Website is about R. We aim to provide to methodologists a centralized space where they can share code and good practices.
 
-```{r}
-1 + 1
-```
+To reach us please send an email to:

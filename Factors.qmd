@@ -1,0 +1,72 @@
+---
+title: "Factors"
+---
+
+## Factor
+
+Factor is an object in R usually uses for the manipulations of categorical variables. Factor is used to encode a vector as a factor (the terms 'category' and 'enumerated type' are used for factors).
+
+## Creating a factor variable
+
+```{r}
+# Create a vector with some categorical data
+data_vector <- c("A", "B", "A", "C", "B", "A")
+
+# Create a factor variable
+factor_variable <- factor(data_vector)
+
+# Print the factor variable
+print(factor_variable)
+
+
+```
+
+## Specifying Custom Levels
+
+You can custom levels for your factor variable using the 'levels' argument:
+
+```{r}
+
+# Create a factor variable with custom levels
+custom_levels <- factor(data_vector, levels = c("A","B","C"))
+
+
+# Print the factor variable with custome levels
+print(custom_levels)
+```
+
+## Changing the Order of levels
+
+The order of levels in a factor can be changed using the 'levels' function.
+
+```{r}
+factor_variable <- factor(data_vector, levels = c("C","A","B"))
+
+# Print the factor variable with changed levels
+print(factor_variable)
+```
+
+## Summary Statistics
+
+Factor variables are useful for summarizing data. Functions such as 'table' can be used in combination with factor variables.
+
+```{r}
+summary_variable <- table(factor_variable)
+print(summary_variable)
+```
+
+## Using Factor in Statistical Analysis
+
+```{r}
+# Create a numeric variable
+numeric_data <- c(10, 15, 12, 20, 18, 25)
+
+factor_variable <- factor(data_vector, levels = c("A","B"))
+
+# Perform a simple t-test by factor level
+t_test_result <- t.test(numeric_data ~ factor_variable)
+
+# Print the t-test result
+print(t_test_result)
+
+```

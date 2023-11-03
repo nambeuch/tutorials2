@@ -1,0 +1,104 @@
+---
+title: "Data Manipulations - dplyr"
+---
+
+```{r}
+#install.packages("dplyr")
+library(dplyr)
+```
+
+Sample data
+
+```{r}
+data <- data.frame(
+  Name = c("Alice", "Bob", "Charlie", "David"),
+  Age = c(25, 30, 35, 40),
+  Department = c("HR", "IT", "Finance", "HR")
+)
+
+```
+
+## Read
+
+### Filtering rows based on conditions
+
+Use the function **filter** function
+
+```{r}
+filtered_data <- data %>% filter(Age > 30)
+
+filtered_data
+```
+
+### Selecting columns
+
+```{r}
+selected_data <- data %>% select(Name, Age)
+
+```
+
+### Arranging rows
+
+Use the **arrange()** function to sort rows based on one or more columns
+
+```{r}
+sorted_data <- data %>% arrange(Age)
+sorted_data
+```
+
+### Group and summarize
+
+Use the \*\* group_by()\*\* and **summarize()** functions to group and summarize data.
+
+```{r}
+grouped_data <- data %>% group_by(Department) %>% summarize(AvgAge = mean(Age))
+
+```
+
+### Mutate
+
+Use the **mutate()** function to create or modify columns
+
+```{r}
+mutated_data <- data %>% mutate(Salary = Age * 1000)
+
+```
+
+### Join Data Frames
+
+We can use functions like **left_join()** , **inner_join()** etc.
+
+```{r}
+employees <- data.frame(
+  Name = c("Alice", "Bob", "Charlie"),
+  Salary = c(50000, 60000, 55000)
+)
+
+joined_data <- data %>% left_join(employees, by = "Name")
+
+
+righter <- data %>% right_join(employees, by = "Name")
+```
+
+### Pipes
+
+```{r}
+final_result <- data %>%
+  filter(Age > 30) %>%
+  select(Name, Age) %>%
+  arrange(Age)
+
+
+```
+
+## Practice
+
+Download a PUMF file from one of your favorite survey.
+
+```{r}
+zip_path <- "https://www150.statcan.gc.ca/n1/en/pub/46-25-0001/2021001/2021.zip"
+extract_path <- tempfile()
+download.file(url = zip_path, destfile = extract_path, method = "auto", quiet = TRUE)
+
+unzip(extract_path, files = paste0(extract_path, "/", "2021_CHS_PUMF/Data/CHS2021ECL_PUMF.csv")) 
+```

@@ -1,0 +1,100 @@
+---
+title: "Matrix"
+author: "Christian Nambeu"
+date: "October 14, 2023"
+format: html
+editor: visual
+---
+
+## Matrix
+
+Matrices are also one of the most popular objects in R, especially in the area of statistics. For instance, they are often used in linear regression.
+
+A matrix is a two by two containers that can
+
+be used to store data and facilitates some computations. Matrices belong to the categories of atomic and non-recursive objects. They can have attributes such as their dimensions and dimension names.
+
+## Creating matrices
+
+To create a matrix, one can used functions \*\* matrix()\*\* and \*\* as.matrix\*\*. For more information on this function enters \*\* help(matrix)\*\* in the terminal. Below are some examples on how to create matrices.
+
+```{r}
+# for the help
+help(matrix)
+```
+
+```{r}
+# Creating a matrix from raw data
+mat1 <- matrix(data = c(10,20,30, 46, 70, 80), nrow = 2, ncol = 3, byrow = FALSE, dimnames = NULL )
+
+## we can add names to both columns and rows.
+dimnames(mat1) <- list(ligne = c("un","deux"), colonne = c("c1","c2","c3"))
+mat1
+
+## look for attributes
+attributes(mat1) # dim expresses the fact that matrix is 2x3, dimnames has two components: ligne and colonne.
+# to get access to one attribute
+attr(mat1, "dimnames")
+```
+
+A matrix is an atomic object. The following lines of code is an illustration that matrices can only host one data type. If a different data types are provided, R try to create the matrix using the most suitable data type.
+
+```{r}
+mat2 <- matrix(c(10, 'a', 3, 6), nrow = 2, byrow = TRUE)
+mat2 ## R has set the mode of each element in the matrix to characters
+mode(mat2)
+```
+
+A matrix is a non-recursive object. That is, it cannot contain other matrices or any other objects. The example illustrates this point.
+
+```{r}
+mat3 <- matrix(c(1,2,3,4), nrow = 2)
+```
+
+Using the function \*\* as.matrix\*\* to create a matrix.
+
+```{r}
+mat4 <- as.matrix(c(1,2,3,4))
+mat4 # a matrix of 4 rows and one column
+```
+
+## Reading matrices
+
+Read the whole matrix.
+
+```{r}
+print(mat1)
+```
+
+Remove the dimnames attributes.
+
+```{r}
+dimnames(mat1) <- NULL
+mat1
+```
+
+Accessing elements in a matrix using \*\* \[ \*\* operator.
+
+```{r}
+## access one element
+mat1[1,2] # at element at row 1 and column 2
+print(mat1[1,2])
+
+## access more than one row
+mat1[1:2,] # rows 1 and 2 with all columns
+print(mat1[1:2,])
+
+## access selected columns
+mat1[, 2:3]
+print(mat1[,2:3])
+```
+
+Accessing elements of a matrix using \*\* \[\[ \*\*
+
+```{r}
+mat1
+# the first element
+mat1[[1]]
+## the fourth element
+mat1[[4]]
+```

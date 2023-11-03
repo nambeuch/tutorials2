@@ -1,0 +1,13 @@
+---
+title: "Reading external data files"
+---
+
+In this tutorial, the focus is in reading various types of data, including files with extension csv, 7bdat and others.
+
+## Reading SAS files
+
+## Reading CSV files
+
+## Reading EXCEL files
+
+## 

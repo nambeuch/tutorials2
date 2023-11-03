@@ -1,0 +1,64 @@
+---
+title: "Array"
+---
+
+## Array
+
+In R, an array is a multi-dimensional data structure that can hold elements of the same data type. Unlike data frames, which are two-dimensional, arrays can have multiple dimensions (e.g., 1D, 2D, 3D, etc.).
+
+## Create
+
+```{r}
+# Create a 1D array
+one_dim_array <- c(1, 2, 3, 4, 5)
+
+# Create a 2D array
+two_dim_array <- matrix(1:6, nrow = 2, ncol = 3)
+
+# Create a 3D array
+three_dim_array <- array(1:24, dim = c(2, 3, 4))
+
+```
+
+## Read
+
+```{r}
+# Access elements in a 1D array
+third_element <- one_dim_array[3]
+
+# Access elements in a 2D array
+element_row2_col3 <- two_dim_array[2, 3]
+
+# Access elements in a 3D array
+element_dim2_row1_col2 <- three_dim_array[1, 2, 1]
+
+```
+
+## Update
+
+```{r}
+# Modify elements in a 1D array
+one_dim_array[2] <- 10
+
+# Modify elements in a 2D array
+two_dim_array[1, 2] <- 7
+
+# Modify elements in a 3D array
+three_dim_array[1, 2, 1] <- 42
+
+```
+
+## Delete
+
+```{r}
+# Remove elements in a 1D array
+one_dim_array <- one_dim_array[-3]
+
+# Remove elements in a 2D array
+two_dim_array <- two_dim_array[-1, ]
+
+# Remove elements in a 3D array
+three_dim_array <- three_dim_array[,-2, ]
+
+```
+

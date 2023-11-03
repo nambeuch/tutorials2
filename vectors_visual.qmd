@@ -1,0 +1,141 @@
+---
+title: "Vectors"
+author: "Christian Nambeu"
+date: "October 14, 2023"
+format: html
+editor: visual
+---
+
+## Vectors
+
+Vectors are one the most popular objects in R. They are used to store data of same type - It is an atomic object. Moreover, vectors are also said to be non-recursive objects. That is, a vector cannot contain other vectors or any other objects.
+
+A vector can have an attribute names, that is each element can be assigned a name.
+
+## Creating vectors
+
+Vectors can be created using the function c().
+
+```{r}
+# Creating a vector numeric
+x <- c(1,2,3,4,5)
+class(x) # checking the type of elements
+mode(x) # mode of the object - useful with vectors
+
+# characters
+y <- c('1', 'a', '3', '4')
+class(y)
+
+# complex numbers
+z <- c(2 + 3i, 9 + 7i, 25 + 12i)
+class(z)
+
+# Boolean values
+u <- c(FALSE, TRUE, TRUE)
+class(u) 
+```
+To get more information about the c() function, run the following command:
+```{r}
+help(c)
+```
+
+When creating vectors, it is possible to add names to each of the elements of the vectors. The example below shows this can be done.
+
+```{r}
+x <- 1:26 # create a vector of integers
+names(x) <- letters[1:length(x)] # letters[] is vectors of letters - I simply extracted the lenght(x) ones.
+x
+
+# to see what attributes are available
+attributes(x)
+
+# to extract a specific attributes
+attr(x, "names") # returns the vector of names.
+```
+To remove the attribute, we can use the following line of code
+```{r}
+x <- c(x, recursive = FALSE, use.names = FALSE) # the last parameter indicates names should not be retained
+x # check if it worked
+```
+
+## Reading a whole or a subset of a vector
+
+To get the full content of a vector, just print it.
+
+```{r}
+# option 1
+print(x)
+# option 2
+x
+# option 3
+cat(x)
+
+```
+
+To access a subset of the vector, there are two operators that can be used: "[" or "[[". The difference between these two operators is nil for the vectors. But for other objects that we will encounter, here are some of the main differences. The single bracket "[" will return the same object as the original object. It can be used to extract one or more elements, whereas it is not the case for the double brackets. The latter will return the type of the element in the case of recursive objects.
+
+```{r}
+# access by position - remember that unlike language like C, the first element is at index 1 instead of 0.
+x[2] # the second element
+# access elements from position 5 to 10
+x[5:10]
+
+## can also access element using logical value
+x[c(rep(TRUE, 10), rep(FALSE, 90))]
+
+
+## can also using some conditional expression that will return logical value
+x[ x > 9]
+
+
+```
+
+## Updating vectors
+
+When a vector exists, it can be modified in various ways. In this section, some of the most common ways are illustrated.
+
+```{r}
+## updating the value at position 10 - with value 550
+x[10] <- 550
+print(x)
+
+## Updating the second and third value of x
+x[c(2,3)] <- c(200,300)
+print(x)
+
+## Double brackets can also be used - although not intuitive - remember only one value can be accessed at a time.
+x[[10]] <- 10
+print(x)
+
+# x[[8:10]] this won't work for instance.
+
+## 
+
+```
+
+## Deleting objects
+
+To delete an object, for example vectors, we can use the function ** rm() **. Below an example where we deleted the vector called **z**.
+
+```{r}
+# list all the objects that are in the global environment.
+ls()
+# remove a specific objects
+rm(list = c("z"))
+
+# can remove all the objects with the following  instruction
+rm(list =ls())
+```
+
+
+## What we have learned?
+
+<ul>
+  <li> Vectors' features: attributes, atomic and non-recursive </li>
+  <li> How to create, read, update and delete vectors </li>
+  <li> The concept of vectorization</li>
+  <li> Residual rule with vectors </li>
+  <li> How to perform some aggregate computation on vectors </li>
+</ul>
+
+

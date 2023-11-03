@@ -8,7 +8,14 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: vectors_visual.qmd
+      - href: Matrix.qmd
+      - href: List.qmd
+      - href: DataFrame_manipulations.qmd
+      - href: Factor_v2.qmd
+      - href: dplyr.qmd
+      - href: ReadingExternalDataFiles.qmd
+      - href: Sas_R_comparisons.qmd
 
 format:
   html:

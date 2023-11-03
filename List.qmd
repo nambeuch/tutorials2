@@ -1,0 +1,83 @@
+---
+title: "Lists"
+---
+
+## List
+A list is a versatile data structure in R that can hold elements of different data types.
+
+Lists are not atomic; they are composite data structures. 
+
+Lists can be recursive, meaning they can contain other lists.
+
+Lists can have attributes, which are metadata associated with the list. These attributes can include names, dimensions, or other information.
+
+## Create
+
+```{r}
+# Create an empty list
+my_list <- list()
+
+# Create a list with elements of different types
+mixed_list <- list(1, "apple", 3.14, TRUE)
+
+# Create a list with named elements
+named_list <- list(name = "Alice", age = 30, city = "New York")
+
+```
+
+
+### Attributes
+```{r}
+attributes(mixed_list)
+
+# Adding names to a list
+names(mixed_list) <- c("Number", "Fruit", "Value", "Boolean")
+
+# Adding dimensions to a list
+dim(mixed_list) <- c(2, 2)
+
+attributes(mixed_list)
+
+```
+
+
+## Read
+
+```{r}
+# Access elements by index
+first_element <- mixed_list[[1]]
+second_element <- mixed_list[[2]]
+
+# Access elements by name
+alice_age <- named_list$name
+alice_city <- named_list$city
+
+```
+
+## Update
+
+```{r}
+# Modify an element
+mixed_list[[2]] <- "banana"
+
+# Add a new element
+mixed_list[[5]] <- "cherry"
+
+# Modify named elements
+named_list$age <- 31
+named_list$city <- "Los Angeles"
+
+```
+
+## Delete
+
+```{r}
+# Remove an element by index
+rm_element <- mixed_list[[3]]
+mixed_list <- mixed_list[-3]
+
+# Remove an element by name
+rm(named_list)
+
+```
+
