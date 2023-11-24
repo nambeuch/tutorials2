@@ -1,0 +1,226 @@
+---
+title: "SQL and R"
+---
+
+In this tuto, we'll cover database queries using RSQLite connection.
+
+The following functions of the DBI package used throughout the tutorial:
+
+1.  dbConnect
+2.  dbListTables
+3.  dbWriteTable
+4.  dbExecute
+5.  dbReadTable
+6.  dbGetQuery
+
+## 1. Install required packages
+
+```{r}
+## Installing packages
+#installed.packages("DBI")
+#install.packages("RSQLite")
+#install.packages("readxl")
+
+## loading them
+library(DBI)
+library(RSQLite) # not installed by default on AVD
+library(readxl)
+        
+```
+
+## 2. Setting the working directory
+
+```{r}
+# assuming the relative working folder is called R
+path <- "C:/Users/nambchr/Desktop/tutorials/R"
+setwd(path)
+```
+
+## 3. Database Structure 
+
+The database structure will look like this:
+
+![](images/image-468976938.png)
+
+There are four tables:
+
+**SERVICE** ([Num_S]{.underline}, Libellé, Étage, *Chef*) \
+**EMPLOYÉ** ([Num_E]{.underline}, Nom_E, Fonction, Salaire, *Num_S*)  \
+**PROJET** ([Num_P]{.underline}, Titre, Début_P, Fin_P, *Num_S*) \
+**AGIT** ([*Num_E*, *Num_P*]{.underline}, Rôle) 
+
+**EMPLOYE table**
+![](images/image-305033584.png)
+
+**SERVICE**
+
+![](images/image-711747911.png)
+
+**PROJET**
+
+![](images/image-623208762.png)
+
+**AGIT**
+
+![](images/image-270780990.png)
+
+## 4. Database creation
+
+```{r}
+getwd()
+## Read data from a different sources;
+employe <- readxl::read_excel(path = "base_donnees.xlsx", sheet = "Employe")
+service <- readxl::read_excel(path = "base_donnees.xlsx", sheet = "Service")
+project <- readxl::read_excel(path = "base_donnees.xlsx", sheet = "Projet")
+agit <- readxl::read_excel(path = "base_donnees.xlsx", sheet = "agit")
+
+con <- dbConnect(RSQLite::SQLite(), ":memory:") # establish a connection
+dbListTables(con) # Check the tables in the database
+
+dbWriteTable(con, "employe", employe, overwrite = TRUE)
+dbWriteTable(con ,"service", service, overwrite = TRUE)
+dbWriteTable(con ,"project", project, overwrite = TRUE)
+dbWriteTable(con ,"agit", agit, overwrite = TRUE)
+
+dbListTables(con)
+
+## remove the four dataframes employe, service, project, and agit
+rm(list= c("employe", "service", "project", "agit"))
+```
+
+## 5. Questions
+
+1.  Create a new *EmployeeSpecial* table containing employees with *Num \_E \<8000*
+
+```{r}
+## Create a new table containing employee with num_e < 8000
+dbExecute(con, "create table employeSpecial as select * from employe where num_e < 8000")
+
+```
+
+2.  Update the EmployeeSpecial table by replacing the Num_E value with 7777 for employee 'Nadia Tazi'.
+
+    ```{r}
+    ## Update the table employeSpecial by replacing num_e by 7777 for the employee Nadia tazi
+    dbExecute(con, "update employeSpecial set num_e = 7777 where nom_e = 'Nadia Tazi' ")
+
+    dbReadTable(con, "employeSpecial")
+    ```
+
+3.  Insert the following tuple in EmployeeSpecial: 8888, 'Lien Nguyen', 'Analyste', 57000, 3
+
+    ```{r}
+    dbExecute(con, "insert into employeSpecial
+                values(8888, 'Lien Nguyen', 'Analyste', 57000, 3)")
+    ```
+
+4.  Formulate a SQL query that allows you to obtain the list of employees with a salary between \$30,000 and \$40,000
+
+    ```{r}
+    dbGetQuery(con, "select * from employeSpecial where salaire between 30000 and 40000")
+    ```
+
+5.  Formulate a SQL query that allows you to obtain the names of employees starting with the letter N
+
+    ```{r}
+    dbGetQuery(con, "select nom_e from employeSpecial where nom_e like 'N%' ")
+    ```
+
+6.  Formulate a SQL query that allows you to obtain the list of projects managed by department number "1"
+
+    ```{r}
+    dbGetQuery(con, "select * from project where num_s =1")
+    ```
+
+7.  Formulate a SQL query that allows you to obtain the list of employees who are analysts or programmers
+
+    ```{r}
+    dbGetQuery(con, "select * from employeSpecial where fonction in('Analyste', 'programmeur')")
+    ```
+
+8.  Formulate a SQL query that obtains the names, positions and salaries of employees who are either programmers or employees with a salary \< \$45,000 and belonging to department 1
+
+    ```{r}
+    dbGetQuery(con, "select * from employeSpecial where ( fonction in ('programmeur')
+               or salaire < 45000) and num_s = 1") 
+    ```
+
+9.  Formulate a SQL query that allows you to get the titles of 3 projects with the latest end dates
+
+    ```{r}
+    dbGetQuery(con, "select titre, fin_p from project order by fin_p desc limit 3")
+    ```
+
+10. Show the minimum wage per job
+
+    ```{r}
+    dbGetQuery(con, "select fonction, min(salaire) as min_salaire
+                        from employeSpecial group by fonction") 
+    ```
+
+11. Formulate a SQL query that allows you to obtain the list of employees with a salary higher than the average salary of all employees
+
+    ```{r}
+    dbGetQuery(con, "select num_e, nom_e, salaire
+                        from employeSpecial where salaire > (select avg(salaire) from employeSpecial)") 
+
+    ```
+
+12. Formulate a SQL query that allows you to obtain the list of departments that are located on the same floor as the purchasing department
+
+    ```{r}
+    dbGetQuery(con, "select num_s , libelle from service
+                        where etage = (select etage from service where libelle in('Achats'))and libelle not in('Achats')  ")
+    ```
+
+13. Formulate a SQL query that allows you to know how many projects each employee is involved in.
+
+    ```{r}
+    dbGetQuery(con, "select distinct num_e, count(*) as nb_projet from agit group by num_e ")
+
+    ```
+
+14. Formulate a SQL query that allows you to determine the role assumed by Lyne Boivin in each of the projects in which she is involved? Display project title and role.
+
+    ```{r}
+    dbGetQuery(con, "select (select nom_e from employeSpecial where nom_e in ('Lyne Boivin') ) as nom_e,
+                      num_p, role from agit where num_e = (select num_e from employeSpecial where nom_e in ('Lyne Boivin'))")
+
+    ```
+
+15. Formulate a SQL query that allows you to find out how many days ago each project was completed?
+
+    ```{r}
+
+    ```
+
+16. Formulate a SQL query to determine the number of months between the start date of each project and January 1, 2000?
+
+    ```{r}
+
+    ```
+
+17. Perform the following outer join operations on the EmployeeSpecial and AGIT tables:
+
+    a.	LEFT OUTER JOIN
+
+    b.	RIGHT OUTER JOIN
+
+    c.	FULL OUTER JOIN.
+
+    ```{r}
+    dbGetQuery(con, "  select a.*, num_p, role from EmployeSpecial as a left outer join agit as b
+                                    on a.num_e = b.num_e ")
+      
+      dbGetQuery(con, "select a.*, num_p , role from EmployeSpecial as a right outer join agit as b
+                          on a.num_e = b.num_e")
+      
+      dbGetQuery(con, "select a.*, num_p, role from EmployeSpecial as a full outer join agit as b
+                        on a.num_e = b.num_e")
+    ```
+
+18. Write the statement to close the connection
+
+    ```{r}
+    dbDisconnect(con)
+    ```

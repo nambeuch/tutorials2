@@ -163,9 +163,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link" href="./DataFrame_manipulations.html">
  <span class="menu-text">Data frame manipulations base R</span></a>
   </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="./Factor_v2.qmd">
- <span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./factors_v2.html">
+ <span class="menu-text">Factors</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./dplyr.html">
@@ -174,6 +174,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li class="nav-item">
     <a class="nav-link" href="./ReadingExternalDataFiles.html">
  <span class="menu-text">Reading external data files</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./Sas_R_comparisons.html" aria-current="page">
+ <span class="menu-text">SAS and R comparisons</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./SQL_and_R.html">
+ <span class="menu-text">SQL and R</span></a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -425,8 +433,8 @@ please set environment variable 'TZ'</code></pre>
  $ EFAMTYPE: int [1:108982] 5 2 11 18 1 6 11 3 11 14 ...
  $ AGYOWNK : int [1:108982] NA NA NA NA NA 1 NA 3 NA 2 ...
  $ FINALWT : int [1:108982] 537 106 164 143 218 575 247 44 127 108 ...
- $ WAGES   : num [1:108982] 96.5 95.1 108.6 109.9 100.5 ...
- $ BENEFITS: num [1:108982] 18.697 83.184 26.977 38.576 0.456 ...</code></pre>
+ $ WAGES   : num [1:108982] 110.1 105.3 105.9 98.4 99 ...
+ $ BENEFITS: num [1:108982] 4.02 29.55 18.32 44.65 12.49 ...</code></pre>
 </div>
 </div>
 </section>
@@ -464,16 +472,16 @@ please set environment variable 'TZ'</code></pre>
 <pre><code># A tibble: 108,982 × 4
    REC_NUM INCOME WAGES BENEFITS
      &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
- 1       1  115.   96.5   18.7  
- 2       2  178.   95.1   83.2  
- 3       3  136.  109.    27.0  
- 4       4  148.  110.    38.6  
- 5       5  101.  101.     0.456
- 6       6   98.9  93.8    5.03 
- 7       7  119.   92.6   26.4  
- 8       8  232.   90.8  141.   
- 9       9   86.4  85.8    0.616
-10      10  106.  105.     1.12 
+ 1       1   114. 110.      4.02
+ 2       2   135. 105.     29.6 
+ 3       3   124. 106.     18.3 
+ 4       4   143.  98.4    44.6 
+ 5       5   111.  99.0    12.5 
+ 6       6   107. 100.      7.33
+ 7       7   127. 106.     21.1 
+ 8       8   202. 106.     95.9 
+ 9       9   114. 103.     11.2 
+10      10   155. 111.     44.5 
 # ℹ 108,972 more rows</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#file_var_interest %&gt;% select(REC_NUM, INCOME, WAGES, BENEFITS)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -562,7 +570,7 @@ please set environment variable 'TZ'</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     0     1 
-21676 87306 </code></pre>
+21985 86997 </code></pre>
 </div>
 </div>
 </section>
@@ -573,20 +581,20 @@ please set environment variable 'TZ'</code></pre>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>rich_guys <span class="ot">&lt;-</span> file_var_interest <span class="sc">%&gt;%</span> <span class="fu">filter</span>(RICH <span class="sc">==</span> <span class="dv">1</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rich_guys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 87,306 × 8
+<pre><code># A tibble: 86,997 × 8
    REC_NUM LFSSTAT EVERWORK PERMTEMP WAGES BENEFITS INCOME  RICH
      &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
- 1       1       4        2       NA  96.5    18.7    115.     1
- 2       2       1       NA       NA  95.1    83.2    178.     1
- 3       3       4        2       NA 109.     27.0    136.     1
- 4       4       1       NA       NA 110.     38.6    148.     1
- 5       7       4        3       NA  92.6    26.4    119.     1
- 6       8       1       NA        1  90.8   141.     232.     1
- 7      10       1       NA       NA 105.      1.12   106.     1
- 8      15       4        2       NA  97.7     9.10   107.     1
- 9      16       4        2       NA  97.4    37.0    134.     1
-10      18       1       NA        1 107.     21.6    129.     1
-# ℹ 87,296 more rows</code></pre>
+ 1       1       4        2       NA 110.      4.02   114.     1
+ 2       2       1       NA       NA 105.     29.6    135.     1
+ 3       3       4        2       NA 106.     18.3    124.     1
+ 4       4       1       NA       NA  98.4    44.6    143.     1
+ 5       5       1       NA       NA  99.0    12.5    111.     1
+ 6       6       4        2       NA 100.      7.33   107.     1
+ 7       7       4        3       NA 106.     21.1    127.     1
+ 8       8       1       NA        1 106.     95.9    202.     1
+ 9       9       4        2       NA 103.     11.2    114.     1
+10      10       1       NA       NA 111.     44.5    155.     1
+# ℹ 86,987 more rows</code></pre>
 </div>
 </div>
 <p>Create a file containing only married and living in common-law</p>
@@ -729,11 +737,11 @@ please set environment variable 'TZ'</code></pre>
 <pre><code># A tibble: 5 × 2
   region            tot_income
   &lt;chr&gt;                  &lt;dbl&gt;
-1 Atlantic          270060305.
-2 British Columbia  568427962.
-3 Ontario          1612135874.
-4 Prairies          730066227.
-5 Quebec            912293264.</code></pre>
+1 Atlantic          270210544.
+2 British Columbia  569578981.
+3 Ontario          1608650859.
+4 Prairies          726689117.
+5 Quebec            909570119.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of weighted people</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>file_inner_join <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(region) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>( <span class="at">tot_pers =</span> <span class="fu">sum</span>(FWEIGHT))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

@@ -6,11 +6,11 @@ title: "Data frame manipulations base R"
 
 In this tutorial, we show how to create a data frame. Then we move on to some manipulations with data frames.
 
-It is one of the most frequent use objects in R. It is not atomic - it can contain more than one data types. For instance, some variables may be characters and others numeric.
+It is one of the most frequent used objects in R. It is **not atomic** - it can contain more than one data types. For instance, some variables can be characters while others are numeric.
 
-A data frame object of not recursive. That is, a data frame cannot contain another data frame.
+A data frame object is a **recursive** object. A data frame is stored internally as a list, as the result of a call to typeof(data.frame) will return.
 
-A data frame object has attributes: names, row.names, and class.
+A data frame object has **attributes**: names, row.names, and class.
 
 ## Creating a Data Frame
 

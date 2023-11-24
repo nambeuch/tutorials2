@@ -1,13 +1,80 @@
 ---
-title: "Reading external data files"
+title: "Import and Export into text files"
 ---
 
-In this tutorial, the focus is in reading various types of data, including files with extension csv, 7bdat and others.
+## Cat and scan
 
-## Reading SAS files
+In R these are the two functions at the core of import and export process.
 
-## Reading CSV files
+```{r}
+# Reading external files.
 
-## Reading EXCEL files
+dta <- data.frame(income = rnorm(100, 10, 1), expenses = rnorm(100, 8, 0.5))
+head(dta)
 
-## 
+
+getwd()
+path <- "C:/Users/nambchr/Desktop/tutorials/tutorials"
+
+setwd(path)
+dir() # list the directories and files in the working directory
+
+dir.create("import_export")
+dir()
+setwd( paste0(getwd(), "/", "import_export"))
+
+
+# Using scan and cat to write and read into a file.
+
+?cat
+# Create a file connection
+fil <- file("cat_file.txt", "w")
+cat(dta$income, file = fil ,sep= '\n', append = FALSE)
+close(fil)
+
+# reading from a file
+fil <- file("cat_file.txt","r")
+read_cat_file <- scan(file= fil, flush = FALSE)
+str(read_cat_file)
+close(fil)
+unlink("file.txt")
+
+
+```
+
+## write.table and read.table
+
+```{r}
+dta <- data.frame(income = rnorm(100,10,1),
+                  expenses = rnorm(100,8,0.5),
+                  prov = sample(c("ON","QC"), 100, replace = TRUE))
+
+getwd()
+# open a connection, write in a text file and close the connection
+fil <- file("write_file.txt", "w")
+write.table(x=dta, file=fil, append = FALSE)
+close(fil)
+
+# open connection, read a file text and close connection
+fil <- file("write_file.txt", "r") # read connection
+db_read_t <- read.table(file = fil, header = TRUE)
+close(fil)
+
+db_read_t
+
+
+## add some missing valuers -;
+dta[2,3] <- ""
+dta[3,1] <- NA
+dta[4,2] <- NA
+
+head(dta)
+
+fil<- file("file.txt", "w")
+write.table(x = dta, file = fil, append = FALSE)
+close(fil)
+
+fil <- file("file.txt", "r")
+read.table(file = fil, header = TRUE, na.strings = c('', 99996))
+close(fil)
+```

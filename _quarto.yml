@@ -12,10 +12,11 @@ website:
       - href: Matrix.qmd
       - href: List.qmd
       - href: DataFrame_manipulations.qmd
-      - href: Factor_v2.qmd
+      - href: factors_v2.qmd
       - href: dplyr.qmd
       - href: ReadingExternalDataFiles.qmd
       - href: Sas_R_comparisons.qmd
+      - href: SQL_and_R.qmd
 
 format:
   html:

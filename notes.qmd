@@ -1,0 +1,87 @@
+---
+title: "Notes"
+---
+
+**Management philosophy**: recruitment of bright and self-motivated individuals and give them the freedom to come up with their own ideas.
+
+At the same time, there was a belief that some of these ideas would fundamentally be valuable for Communication, and so for the parent company - Can this mindset be used at Statistics Canada also?
+
+# Import and Export with R
+
+Text file - the easiest form of data to import into R, and an acceptable solution for small and medium scale problems.
+
+Function **scan** as the primary function to import text file data.
+
+Methodologists have to deal everyday with data in some proprietary binary format such as Excel and SAS. "Often the simplest thing to do is to use the originating application to export the data as a text file (and statistical consultants will have copies of the most common applications on their computers for that purpose)." However, this is not always possible, and in this chapter we will see some available solutions that allow to read these proprietary data directly from R.
+
+Data stored in a binary form for compactness and speed of access. One application of this is imaging data, which is normally stored as a stream of bytes as represented in memory.
+
+For larger data sets, it is common to handle the data using a database management system. (DBMS).
+
+Chapter 9 - Reading Excel spreadsheet.
+
+Chapter 3 - importing from other statistical systems.
+
+Chapter 5 - Binary files.
+
+Chapter 4 - Relational databases.
+
+**Encoding**: File encodings, also known as character encodings, specify how to represent characters when text processing.
+
+Examples: UTF-8 Unicode English text; ISO-8859 English text; UTF-8 Unicode text, UTF-8 Unicode (with BOM) text.
+
+We can be reduced to looking at the file with the command-line utility od or a hex editor to work out its encoding.
+
+**Export to text files**
+
+Function **cat** underlies the functions for exporting data. It takes a file argument, and the append argument allows a text file to written via successive calls to cat. Better, especially if this is to be done many times, is to open a file connection for writing or appending, and cat to that connection, then close it.
+
+Functions: write, write.table - **write** is a wrapper to cat.
+
+Issues:
+
+-   Precision
+
+-   header line: some systems required entry for the row names, which is what write.table will provide if argument col.names = NA is specified. Excel is one such system.
+
+-   separator: a field separator is a comma. as that is unlikely to appear in any of the fields in English-speaking countries. Such files are known as CSV (comma separated values) files.
+
+-   Missing values: missing valuer are output as NA, but this may be changed by argument na. NaN are treated as NA by write.table but not by cat nor write.
+
+-   Quoting strings
+
+-   Encodings: text files do not contain metadata on their encodings, so for non-ASCII data the file needs to be targetted to the application intended to read it.
+
+Benefits to the use a file format such as XML.
+
+-   Other files you must provide all the metadata - such as the encoding, value separator, missing values etc. But with XML, the information is embedded in there.
+
+Packages mentionned in the document:
+
+[CRAN - Package XML (r-project.org)](https://cran.r-project.org/web/packages/XML/index.html)
+
+```{r}
+library("XML")
+library("methods")
+
+getwd()
+path2 <- "C:/Users/nambchr/Desktop/tutorials/tutorials"
+
+result <- XML::xmlParse(file = paste0(path2,"/", "input.xml"))
+print(result)
+```
+
+```{r}
+# extract the root node
+rootnode <- XML::xmlRoot(result)
+rootnode[1]
+
+## Extract some elements.
+
+```
+
+# Bibliography
+
+Core team, 2000 "R Data Import/Export".
+
+[Connection in R](https://www3.nd.edu/~steve/computing_with_data/23_data_import/data_import.html#:~:text=Connections,a%20path%20to%20the%20file.)

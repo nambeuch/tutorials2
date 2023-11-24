@@ -162,9 +162,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="nav-link active" href="./DataFrame_manipulations.html" aria-current="page">
  <span class="menu-text">Data frame manipulations base R</span></a>
   </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="./Factor_v2.qmd">
- <span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="./factors_v2.html">
+ <span class="menu-text">Factors</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./dplyr.html">
@@ -173,6 +173,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li class="nav-item">
     <a class="nav-link" href="./ReadingExternalDataFiles.html">
  <span class="menu-text">Reading external data files</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Sas_R_comparisons.html">
+ <span class="menu-text">SAS and R comparisons</span></a>
   </li>  
 </ul>
               <div id="quarto-search" class="" title="Search"></div>
@@ -219,9 +223,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="data-frame" class="level2">
 <h2 class="anchored" data-anchor-id="data-frame">Data Frame</h2>
 <p>In this tutorial, we show how to create a data frame. Then we move on to some manipulations with data frames.</p>
-<p>It is one of the most frequent use objects in R. It is not atomic - it can contain more than one data types. For instance, some variables may be characters and others numeric.</p>
-<p>A data frame object of not recursive. That is, a data frame cannot contain another data frame.</p>
-<p>A data frame object has attributes: names, row.names, and class.</p>
+<p>It is one of the most frequent used objects in R. It is <strong>not atomic</strong> - it can contain more than one data types. For instance, some variables can be characters while others are numeric.</p>
+<p>A data frame object is a <strong>recursive</strong> object. A data frame is stored internally as a list, as the result of a call to typeof(data.frame) will return.</p>
+<p>A data frame object has <strong>attributes</strong>: names, row.names, and class.</p>
 </section>
 <section id="creating-a-data-frame" class="level2">
 <h2 class="anchored" data-anchor-id="creating-a-data-frame">Creating a Data Frame</h2>
@@ -232,12 +236,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data_frame)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id           income          expense     
- Min.   :1.00   Min.   : 96.60   Min.   :49.39  
- 1st Qu.:1.75   1st Qu.: 99.41   1st Qu.:49.41  
- Median :2.50   Median :100.70   Median :49.95  
- Mean   :2.50   Mean   :100.23   Mean   :49.95  
- 3rd Qu.:3.25   3rd Qu.:101.53   3rd Qu.:50.49  
- Max.   :4.00   Max.   :102.93   Max.   :50.53  </code></pre>
+ Min.   :1.00   Min.   : 98.31   Min.   :49.64  
+ 1st Qu.:1.75   1st Qu.: 99.57   1st Qu.:49.73  
+ Median :2.50   Median :100.65   Median :50.02  
+ Mean   :2.50   Mean   :100.32   Mean   :50.02  
+ 3rd Qu.:3.25   3rd Qu.:101.40   3rd Qu.:50.31  
+ Max.   :4.00   Max.   :101.66   Max.   :50.39  </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>second_data_frame <span class="ot">&lt;-</span> <span class="fu">data.frame</span>( <span class="at">id =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">7</span>), <span class="at">wages =</span> <span class="fu">rnorm</span>(<span class="dv">4</span>, <span class="dv">20</span>, <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -250,10 +254,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data_frame_sorted</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  id    income  expense
-2  2 102.93485 49.38937
-1  1 101.05849 50.53081
-3  3 100.34162 50.47438
-4  4  96.60482 49.42261</code></pre>
+1  1 101.65891 49.64098
+4  4 101.31637 50.28141
+2  2  99.98873 50.38523
+3  3  98.31278 49.75753</code></pre>
 </div>
 </div>
 </section>

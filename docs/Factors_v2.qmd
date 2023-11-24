@@ -2,7 +2,7 @@
 title: "Factors"
 ---
 
-## Introduction
+## Intro
 
 Factors are often used to analyze categorical variables.
 
@@ -97,7 +97,7 @@ table(frame[, c("province_code")], useNA = "always")
 ```
 
 ```{r}
-## if we are not happy with the order - change the order in the levels
+## if we are not happy with the other - change the other in the levels
 dta_factor_2prov <- factor(frame$province_code, levels = c("35", "24"))
 table(dta_factor_2prov)
 ```
@@ -143,6 +143,5 @@ mosaicplot(table(frame$income_class, frame$province_code))
 Factors can be used to conduct statistical analyses involving categorical variables. Some models in R required the use of factors.
 
 ```{r}
-# fitting a linear regression model
 lm(frame$income ~ frame$province_code)
 ```
